@@ -25,7 +25,8 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
-              "src/assets/css/bootstrap.min.css"
+              "src/assets/css/bootstrap.min.css",
+              "@sweetalert2/theme-bootstrap-4/bootstrap-4.css"
             ],
             "scripts": [
               "src/assets/js/jquery.slim.min.js",
