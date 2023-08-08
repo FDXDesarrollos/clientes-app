@@ -8,7 +8,11 @@
             <button class="btn btn-success" type="button" [routerLink]="['/clientes/form']">Nuevo</button>
         </div>
 
-        <table class="table table-bordered table-striped">
+        <div class="alert alert-info" *ngIf="clientes?.length == 0">
+            !Sin registros que mostrar!
+        </div>
+
+        <table class="table table-bordered table-striped" *ngIf="clientes.length > 0">
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
@@ -27,7 +31,12 @@
                     <td>{{ cliente.correo }}</td>
                     <td style="text-align: center;">{{ cliente.fecha }}</td>
                     <td style="text-align: center;">
-                        <button type="button" name="button" class="btn btn-primary" [routerLink]="['/clientes/form/', cliente.id]" >Editar</button>
+                        <button type="button" name="button" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button type="button" name="button" class="btn btn-danger" (click)="delete(cliente)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </td>
                 </tr>
             </tbody>
