@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -16,6 +16,14 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { FormComponent } from './clientes/form.component';
 import { FormsModule } from '@angular/forms';
+
+/***  Configuración global para la internacionalización de LocaleData   ***/
+/***  para formato de fechas, monedas, currency   ***/
+import localeES from '@angular/common/locales/es-MX';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeES, 'es-MX');
+/****************************************************************** */
 
 
 @NgModule({
@@ -39,7 +47,7 @@ import { FormsModule } from '@angular/forms';
     MatMenuModule,
     FormsModule
   ],
-  providers: [],
+  providers: [{provide: LOCALE_ID, useValue: 'es-MX'}],   //  Se agrega esta linea entre {...} para poder usar el formato en las vistas
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -34,7 +34,6 @@ export class ClientesComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-
         this.clienteService.delete(cliente.id)
         .subscribe( (response) => {
           this.clientes = this.clientes.filter(cli => cli !== cliente)
@@ -44,6 +43,7 @@ export class ClientesComponent implements OnInit {
             'success'
           )
         });
+        
       }
     })    
 

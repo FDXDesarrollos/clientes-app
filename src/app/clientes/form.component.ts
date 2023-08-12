@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class FormComponent implements OnInit {
   public titulo: string = "Nuevo Cliente";
   public cliente: Cliente = new Cliente();
+  public errores!: string[];
 
   constructor(private clienteService: ClienteService,
               private router: Router,
@@ -35,20 +36,34 @@ export class FormComponent implements OnInit {
   }
 
   public create(): void {
-    this.clienteService.create(this.cliente)
-    .subscribe( cliente => {
-        Swal.fire('Nuevo cliente', `Cliente "${cliente.nombre}" registrado correctamente!`, 'success');
+    this.clienteService.create(this.cliente).subscribe({
+      next:
+      cliente => {
         this.router.navigate(['/clientes']);
+        Swal.fire('Nuevo cliente', `Cliente "${cliente.nombre}" registrado correctamente`, 'success');
+        
+      },
+      error:
+      err => {
+        this.errores = err.error.errors as string[];
+        console.error('Código del error desde el backend: ' + err.status);
+        console.error(err.error.errors);
       }
-    );
+    });
   }
 
   public update(): void {
     this.clienteService.update(this.cliente)
-    .subscribe( cliente => {
-      Swal.fire('Cliente Acualizado', `Cliente "${cliente.nombre}" actualizado correctamente!`, 'success');
+    .subscribe( (response: any) => {
+      Swal.fire('Cliente Acualizado', `${response.mensaje} de Cliente: <br> ${response.cliente.nombre}`, 'success');
       this.router.navigate(['/clientes']);
-    })
+      },
+      (err: any) => {
+        this.errores = err.error.errors as string[];
+        console.error('Código del error desde el backend: ' + err.status);
+        console.error(err.error.errors);
+      }
+    );
   }
 
 }

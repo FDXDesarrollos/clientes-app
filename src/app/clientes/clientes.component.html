@@ -5,7 +5,9 @@
     <div class="card-body text-primary">
 
         <div class="my-2 text-left">
-            <button class="btn btn-success" type="button" [routerLink]="['/clientes/form']">Nuevo</button>
+            <button class="btn btn-success" type="button" [routerLink]="['/clientes/form']" title="NUEVO">
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
 
         <div class="alert alert-info" *ngIf="clientes?.length == 0">
@@ -29,12 +31,12 @@
                     <td>{{ cliente.nombre }}</td>
                     <td>{{ cliente.apellido }}</td>
                     <td>{{ cliente.correo }}</td>
-                    <td style="text-align: center;">{{ cliente.fecha }}</td>
+                    <td style="text-align: center;">{{ cliente.fecha | date:"fullDate" }}</td>
                     <td style="text-align: center;">
-                        <button type="button" name="button" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;">
+                        <button type="button" name="button" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;" title="EDITAR">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button type="button" name="button" class="btn btn-danger" (click)="delete(cliente)">
+                        <button type="button" name="button" class="btn btn-danger" (click)="delete(cliente)" title="ELIMINAR">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
