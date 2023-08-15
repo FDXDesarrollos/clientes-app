@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import Swal from 'sweetalert2';
@@ -10,14 +14,20 @@ import Swal from 'sweetalert2';
   styleUrls: ['./clientes.component.css']
 })
 export class ClientesComponent implements OnInit {
-
   clientes: Cliente[] = [];
+
+  @ViewChild( MatPaginator ) paginador: MatPaginator;
+  public displayedColumns: string[] = ['id','nombre','apellido','correo','fecha','acciones'];
+  public dataSource = new MatTableDataSource();
 
   constructor(private clienteService: ClienteService) { }
 
   ngOnInit(): void {
     this.clienteService.getClientes().subscribe((clientes) => {
       this.clientes = clientes;
+
+      this.dataSource.data = this.clientes;
+      this.dataSource.paginator = this.paginador;
     });
   }
 

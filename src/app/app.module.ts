@@ -5,12 +5,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav'; 
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatDividerModule } from '@angular/material/divider'; 
 import { MatMenuModule } from '@angular/material/menu';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 import { DirectivaComponent } from './directiva/directiva.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
@@ -45,6 +50,8 @@ registerLocaleData(localeES, 'es-MX');
     MatIconModule,
     MatDividerModule,
     MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
     FormsModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'es-MX'}],   //  Se agrega esta linea entre {...} para poder usar el formato en las vistas

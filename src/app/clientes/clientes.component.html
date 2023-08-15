@@ -14,7 +14,7 @@
             !Sin registros que mostrar!
         </div>
 
-        <table class="table table-bordered table-striped" *ngIf="clientes.length > 0">
+        <!-- <table class="table table-bordered table-striped" *ngIf="clientes.length > 0">
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
@@ -42,7 +42,52 @@
                     </td>
                 </tr>
             </tbody>
+        </table> -->
+        
+        <table mat-table [dataSource]="dataSource" class="mat-cell table table-bordered table-striped text-center">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef class="text-center">ID</th>
+                <td mat-cell *matCellDef="let cliente">{{ cliente.id }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef class="text-center">NOMBRE</th>
+                <td mat-cell *matCellDef="let cliente">{{ cliente.nombre }}</td>
+            </ng-container>
+            
+            <ng-container matColumnDef="apellido">
+                <th mat-header-cell *matHeaderCellDef class="text-center">APELLIDO</th>
+                <td mat-cell *matCellDef="let cliente">{{ cliente.apellido }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="correo">
+                <th mat-header-cell *matHeaderCellDef class="text-center">CORREO</th>
+                <td mat-cell *matCellDef="let cliente">{{ cliente.correo }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef class="text-center">FECHA</th>
+                <td mat-cell *matCellDef="let cliente">{{ cliente.fecha | date:"fullDate"}}</td>
+            </ng-container>                        
+            
+            <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef class="text-center">ACCIONES</th>
+                <td mat-cell *matCellDef="let cliente; let i = index;" class="text-center">
+
+                    <button type="button" name="button" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;" title="EDITAR">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button type="button" name="button" class="btn btn-danger" (click)="delete(cliente)" title="ELIMINAR">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
+
+        <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons ></mat-paginator>
 
     </div>
 </div>
