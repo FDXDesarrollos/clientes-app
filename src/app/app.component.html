@@ -8,15 +8,17 @@
     <ng-template #cerrado> <mat-icon> menu </mat-icon> </ng-template> -->
   </button>
 
-  <img src="assets/img/angular-logo.png" style="width: 45px; margin-right: 10px;">
-  <span>{{ title }}</span>
+  <a href="https://angular.io/docs" style="text-decoration: none; color: #fff;" target="_blank">
+    <img src="assets/img/angular-logo.png" style="width: 45px; margin-right: 10px;">
+    <span>{{ title }}</span>
+  </a>
 
   <span class="example-spacer"></span>
 
   <button mat-icon-button>
       <mat-icon>help_outline</mat-icon>
   </button>
-
+  
   <button mat-button>
     <mat-icon>person_outline</mat-icon>
     Iniciar Sesión
@@ -54,5 +56,4 @@
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

@@ -4,20 +4,18 @@
     </div>
     <div class="card-body text-primary">
 
-        <div class="my-2 text-left">
-            <button class="btn btn-success" type="button" [routerLink]="['/clientes/form']" title="NUEVO">
-                <mat-icon>add</mat-icon>
-            </button>
-        </div>
-
+        <button class="btn btn-success my-2 text-right" type="button" [routerLink]="['/clientes/form']" title="NUEVO">
+            <mat-icon>add</mat-icon>
+        </button>
+    
         <div class="alert alert-info" *ngIf="clientes?.length == 0">
             !Sin registros que mostrar!
         </div>
 
-        <!-- <table class="table table-bordered table-striped" *ngIf="clientes.length > 0">
+        <table class="table table-bordered table-striped" *ngIf="clientes.length > 0">
             <thead>
                 <tr class="text-center">
-                    <th>ID</th>
+                    <th>PERFIL</th>
                     <th>NOMBRE</th>
                     <th>APELLIDO</th>
                     <th>CORREO</th>
@@ -27,23 +25,31 @@
             </thead>
             <tbody>
                 <tr *ngFor="let cliente of clientes">
-                    <td style="text-align: center;">{{ cliente.id }}</td>
+                    <td style="text-align: center;">
+                        <!-- <button type="button" [routerLink]="['/clientes/detalle/', cliente.id]" name="detalle" class="btn btn-secondary" style="margin-right: 10px;" title="DETALLE">
+                        {{ cliente.id }}
+                        </button> -->
+                        <img [src]="cliente.imagen" (click)="verDetalle(cliente)" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;" />
+                    </td>
                     <td>{{ cliente.nombre }}</td>
                     <td>{{ cliente.apellido }}</td>
                     <td>{{ cliente.correo }}</td>
                     <td style="text-align: center;">{{ cliente.fecha | date:"fullDate" }}</td>
                     <td style="text-align: center;">
-                        <button type="button" name="button" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;" title="EDITAR">
+                        <button type="button" name="editar" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;" title="EDITAR">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button type="button" name="button" class="btn btn-danger" (click)="delete(cliente)" title="ELIMINAR">
+                        <button type="button" name="eliminar" class="btn btn-danger" (click)="delete(cliente)" title="ELIMINAR">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
                 </tr>
             </tbody>
-        </table> -->
+        </table>
         
+        <app-paginador-nav *ngIf="paginador" [paginador]="paginador"></app-paginador-nav>
+
+        <!-- 
         <table mat-table [dataSource]="dataSource" class="mat-cell table table-bordered table-striped text-center">
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef class="text-center">ID</th>
@@ -88,6 +94,8 @@
         </table>
 
         <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons ></mat-paginator>
-
+        -->
     </div>
 </div>
+
+<cliente-detalle *ngIf="clienteSelec" [cliente]="clienteSelec"></cliente-detalle>

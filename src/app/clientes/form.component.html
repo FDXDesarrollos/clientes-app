@@ -50,9 +50,29 @@
                         <div *ngIf="correo.errors?.['email']">
                             Formato de correo invalido
                         </div>                  
-                    </div>                         
+                    </div>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="fecha" class="col-form-label col-sm-2">Fecha</label>
+                <div class="col-sm-6">
+                    <input matInput [matDatepicker]="picker" class="form-control" name="fecha" [(ngModel)]="cliente.fecha" style="display: inline; width:  300px;">
+                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>                    
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="region" class="col-form-label col-sm-2">Región</label>
+                <div class="col-sm-6">
+                    <select [compareWith]="selecRegion" class="form-control" name="region" [(ngModel)]="cliente.region" style="width:  500px;">
+                        <option [ngValue]="undefined">--- Seleccionar región ---</option>
+                        <option *ngFor="let region of regiones" [ngValue]="region">{{ region.nombre }}</option>
+                    </select>
+                </div>
+            </div>                    
 
             <div class="form-group row">
                 <div class="col-sm-6">

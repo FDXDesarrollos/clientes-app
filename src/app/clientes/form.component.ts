@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Cliente } from './cliente';
-import { ClienteService } from './cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ClienteService } from './cliente.service';
 import Swal from 'sweetalert2';
+
+import { Cliente } from './cliente';
+import { Region } from './region';
 
 
 @Component({
@@ -13,6 +15,7 @@ import Swal from 'sweetalert2';
 export class FormComponent implements OnInit {
   public titulo: string = "Nuevo Cliente";
   public cliente: Cliente = new Cliente();
+  public regiones: Region[];
   public errores!: string[];
 
   constructor(private clienteService: ClienteService,
@@ -21,6 +24,8 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.show();
+
+    this.clienteService.getRegiones().subscribe(regiones => this.regiones = regiones);
   }
 
   show(): void {
@@ -64,6 +69,11 @@ export class FormComponent implements OnInit {
         console.error(err.error.errors);
       }
     );
+  }
+
+  public selecRegion(obj1: Region, obj2: Region): boolean{  //  El 1er objeto corresponde a cada una de las regiones del ngFor y el 2do en el objeto que esta asignado al cliente
+    if(obj1 === undefined && obj2 === undefined){ return true; }
+    return (obj1 == null || obj2 == null) ? false : obj1.id === obj2.id;
   }
 
 }

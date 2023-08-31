@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { of, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { formatDate, DatePipe } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser'; 
 import Swal from 'sweetalert2';
 
 import { Cliente } from './cliente';
-
+import { Region } from './region';
 //import { CLIENTES } from './clientes.json';
 
 @Injectable({
@@ -18,19 +19,32 @@ export class ClienteService {
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient,
-              private router: Router) { }
+              private router: Router,
+              private sanitizer: DomSanitizer) { }
 
-  getClientes(): Observable<Cliente[]>{
+  getRegiones(): Observable<Region[]>{
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones');
+  }
+
+  getClientes(page: number): Observable<any>{
     //return of(CLIENTES);
     //return this.http.get<Cliente[]>(this.urlEndPoint);
 
-    return this.http.get<Cliente[]>(this.urlEndPoint).pipe(
-      map( (response) => {  //  Formateo de datos con Map
-        let clientes = response as Cliente[];
-
-        return clientes.map( cliente => {
+    return this.http.get<Cliente[]>(this.urlEndPoint + '/page/' + page).pipe(
+      map( (response: any) => {  //  Formateo de datos con Map
+        (response.content as Cliente[]).map( cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
           cliente.apellido = cliente.apellido.toUpperCase();
+          
+          if(cliente.imagen) {
+            //cliente.imagen = 'data:image/jpeg;base64,' + cliente.imagen;
+            let objectURL = 'data:image/jpeg;base64,' + cliente.imagen;
+            cliente.imagen = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            //console.log(cliente.id + ' : ' + cliente.imagen);
+          }
+          else{
+            cliente.imagen = '../../assets/img/no-user.png';
+          }
 
           //  Formato de fecha con formatDate
           //cliente.fecha = formatDate(cliente.fecha, 'dd/MM/yyyy', 'es-MX');
@@ -41,6 +55,8 @@ export class ClienteService {
 
           return cliente;
         });
+
+        return response;
       })
     );
   }
@@ -95,6 +111,24 @@ export class ClienteService {
         return throwError( () => err );
       })
     );    
+  }
+
+  subirImagen(id: string, archivo: File): Observable<HttpEvent<{}>>{
+    let formData = new FormData();
+    formData.append("id", id);
+    formData.append("imagen", archivo);
+
+    const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, { reportProgress: true });
+    
+    return this.http.request(req)
+    .pipe(
+      //map( (response: any) => response.cliente as Cliente),
+      catchError( (err) => {
+        console.log(err.error.mensaje);
+        Swal.fire(err.error.mensaje, err.error.error, 'error');
+        return throwError( () => err );
+      })      
+    );
   }
   
 

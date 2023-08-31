@@ -1,6 +1,7 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,14 +14,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider'; 
 import { MatMenuModule } from '@angular/material/menu';
 
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+//import { MatTableModule } from '@angular/material/table';
+//import { MatPaginatorModule } from '@angular/material/paginator';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+//import { MatNativeDateModule } from '@angular/material/core';
 
 import { DirectivaComponent } from './directiva/directiva.component';
 import { ClientesComponent } from './clientes/clientes.component';
-import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { FormComponent } from './clientes/form.component';
-import { FormsModule } from '@angular/forms';
+import { PaginadorComponent } from './clientes/paginador/paginador.component';
+import { DetalleComponent } from './clientes/detalle/detalle.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+
 
 /***  Configuración global para la internacionalización de LocaleData   ***/
 /***  para formato de fechas, monedas, currency   ***/
@@ -28,7 +35,7 @@ import localeES from '@angular/common/locales/es-MX';
 import { registerLocaleData } from '@angular/common';
 
 registerLocaleData(localeES, 'es-MX');
-/****************************************************************** */
+/************************************************************************ */
 
 
 @NgModule({
@@ -37,7 +44,9 @@ registerLocaleData(localeES, 'es-MX');
     DirectivaComponent,
     ClientesComponent,
     PagenotfoundComponent,
-    FormComponent
+    FormComponent,
+    PaginadorComponent,
+    DetalleComponent
   ],
   imports: [
     BrowserModule,
@@ -50,8 +59,9 @@ registerLocaleData(localeES, 'es-MX');
     MatIconModule,
     MatDividerModule,
     MatMenuModule,
-    MatTableModule,
-    MatPaginatorModule,
+    //MatTableModule,
+    //MatPaginatorModule,
+    MatDatepickerModule, MatMomentDateModule,
     FormsModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'es-MX'}],   //  Se agrega esta linea entre {...} para poder usar el formato en las vistas
