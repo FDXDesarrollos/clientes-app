@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { of, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { formatDate, DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser'; 
-import Swal from 'sweetalert2';
 
 import { Cliente } from './cliente';
 import { Region } from './region';
@@ -16,14 +14,13 @@ import { Region } from './region';
 })
 export class ClienteService {
   private urlEndPoint: string = 'http://localhost:9090/api/clientes';
-  private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient,
               private router: Router,
               private sanitizer: DomSanitizer) { }
 
   getRegiones(): Observable<Region[]>{
-    return this.http.get<Region[]>(this.urlEndPoint + '/regiones');
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones')  //  , {headers: this.agregarAutorizacion()}
   }
 
   getClientes(page: number): Observable<any>{
@@ -62,52 +59,65 @@ export class ClienteService {
   }
 
   getCliente(id:string): Observable<Cliente>{
-    return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`)
+    return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`)  //  , {headers: this.agregarAutorizacion()}
     .pipe(
       catchError( (err) => {
-        this.router.navigate(['/clientes']);
-          console.log(err.error.mensaje);
-          Swal.fire('Error al editar', err.error.mensaje, 'error');
-          return throwError( () => err );
+        if(err.status != 401 && err.error.mensaje){
+          this.router.navigate(['/clientes']);
+          console.error(err.error.mensaje);
+        }
+        
+        return throwError( () => err );
       })
     );
   }
 
   create(cliente: Cliente): Observable<Cliente>{
     console.log( cliente );
-    return this.http.post(this.urlEndPoint, cliente, {headers: this.httpHeaders})
+    return this.http.post(this.urlEndPoint, cliente)  //  , {headers: this.agregarAutorizacion()}
     .pipe(
       map( (response: any) => response.cliente as Cliente),
       catchError( (err) => {
-
         if( err.status == 400 ){
           return throwError( () => err);
         }
 
-        console.log(err.error.mensaje);
-        Swal.fire('Error al registrar', err.error.mensaje + '<br><br>' + err.error.error, 'error');
+        if(err.error.mensaje){
+          console.error(err.error.mensaje);
+        }
+
         return throwError( () => err );
       })
     );
   }
 
   update(cliente: Cliente): Observable<any>{
-    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders})
+    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente) //  , {headers: this.agregarAutorizacion()}
     .pipe(
       catchError( (err) => {
-        console.log(err.error.mensaje);
-        Swal.fire('Error al editar', err.error.mensaje, 'error');
+
+        if(err.status == 400){
+          return throwError( () => err );
+        }
+
+        if(err.error.mensaje){
+          console.error(err.error.mensaje);
+        }
+
         return throwError( () => err );
       })
     );    
   }
 
   delete(id: number): Observable<any>{
-    return this.http.delete<any>(`${this.urlEndPoint}/${id}`, {headers: this.httpHeaders})
+    return this.http.delete<any>(`${this.urlEndPoint}/${id}`)   //  , {headers: this.agregarAutorizacion()}
     .pipe(
       catchError( (err) => {
-        console.log(err.error.mensaje);
-        Swal.fire('Error al eliminar', err.error.mensaje, 'error');
+
+        if(err.error.mensaje){
+          console.error(err.error.mensaje);
+        }
+        
         return throwError( () => err );
       })
     );    
@@ -118,21 +128,11 @@ export class ClienteService {
     formData.append("id", id);
     formData.append("imagen", archivo);
 
-    const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, { reportProgress: true });
+    const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, { 
+      reportProgress: true //, headers: httpHeaders
+    });
     
     return this.http.request(req)
-    .pipe(
-      //map( (response: any) => response.cliente as Cliente),
-      catchError( (err) => {
-        console.log(err.error.mensaje);
-        Swal.fire(err.error.mensaje, err.error.error, 'error');
-        return throwError( () => err );
-      })      
-    );
   }
   
-
-
-
-
 }

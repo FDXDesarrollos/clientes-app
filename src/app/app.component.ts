@@ -2,8 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { delay, filter } from 'rxjs/operators';
-//import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { AuthService } from './usuarios/auth.service';
+
+import Swal from 'sweetalert2';
 
 
 @UntilDestroy()
@@ -24,8 +27,7 @@ export class AppComponent {
     {name: "About", route: "#", icon:"info"}
   ];
 
-  constructor(private observer: BreakpointObserver) {}
-  //constructor(private observer: BreakpointObserver, private router: Router) {}
+  constructor(private observer: BreakpointObserver, private router: Router, public authService: AuthService) {}
 
   ngAfterViewInit(): void {
     this.observer
@@ -51,11 +53,13 @@ export class AppComponent {
         this.sidenav.close();
       }
     });*/
-
   }
 
   logout(){
-
+    let username = this.authService.usuario.username;
+    this.authService.logout();
+    Swal.fire('Logout', `Sesión ${username} cerrada exitosamente`, 'info');
+    this.router.navigate(['/login']);
   }
 
 }

@@ -1,3 +1,4 @@
+import { AuthService } from './../usuarios/auth.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { tap, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -27,7 +28,8 @@ export class ClientesComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
               private modalService: ModalService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              public authService: AuthService) { }
 
   /*ngOnInit(): void {
     this.clienteService.getClientes()
@@ -112,9 +114,11 @@ export class ClientesComponent implements OnInit {
 
   }
 
-  verDetalle(cliente: Cliente): void{
-    this.clienteSelec = cliente;
-    this.modalService.abrirModal();
+  verDetalle(cliente: Cliente): void {
+    if(this.authService.isAuthenticated()){
+      this.clienteSelec = cliente;
+      this.modalService.abrirModal();
+    }
   }
 
 }

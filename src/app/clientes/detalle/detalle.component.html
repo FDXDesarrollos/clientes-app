@@ -36,13 +36,13 @@
                                 </li>
                             </ul>
         
-                            <div class="input-group mb-3">
+                            <div *ngIf="authService.tienePermiso('ROLE_ADMIN')" class="input-group mb-3">
                                 <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="inputGroupFile04" (change)="selecImagen($event)" accept="image/jpeg,image/png" />
                                 <label class="custom-file-label" for="inputGroupFile04">{{nombreImagen}}</label>
                                 </div>
                                 <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" (click)="subirImagen()" [disabled]="!imagenSelec">Enviar</button>
+                                    <button class="btn btn-outline-secondary" type="button" (click)="subirImagen()" [disabled]="!imagenSelec">Enviar</button>
                                 </div>
                             </div>
         

@@ -8,24 +8,29 @@
     <ng-template #cerrado> <mat-icon> menu </mat-icon> </ng-template> -->
   </button>
 
-  <a href="https://angular.io/docs" style="text-decoration: none; color: #fff;" target="_blank">
+  <a routerLink="/" style="text-decoration: none; color: #fff;">
     <img src="assets/img/angular-logo.png" style="width: 45px; margin-right: 10px;">
     <span>{{ title }}</span>
   </a>
 
   <span class="example-spacer"></span>
 
-  <button mat-icon-button>
+  <!-- <button mat-icon-button href="https://angular.io/docs" target="_blank">
       <mat-icon>help_outline</mat-icon>
-  </button>
+  </button> -->
+
+  <a href="https://angular.io/docs" target="_blank" class="btn" role="button" style="text-decoration: none; color: #fff;">
+    <mat-icon>help_outline</mat-icon>
+  </a>
   
-  <button mat-button>
+  <button *ngIf="!authService.isAuthenticated()" routerLink="/login" mat-button>
     <mat-icon>person_outline</mat-icon>
-    Iniciar Sesión
+    Inicia Sesión
   </button>
 
-  <button mat-button [matMenuTriggerFor]="menu">
+  <button *ngIf="authService.isAuthenticated()" mat-button [matMenuTriggerFor]="menu">
       <mat-icon>person</mat-icon>
+      {{ authService.usuario.nombre }}
   </button>
   <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="logout()">
@@ -38,17 +43,19 @@
 
 <mat-sidenav-container>
   <mat-sidenav mode="over" #sidenav="matSidenav" class="mat-elevation-z8">
-    <img class="avatar mat-elevation-z8" src="https://fdxdesarrollo5.000webhostapp.com/img/me.jpg" />
+    <div *ngIf="authService.isAuthenticated()">
+      <img class="avatar mat-elevation-z8" src="https://fdxdesarrollo5.000webhostapp.com/img/me.jpg" />
 
-    <h5 class="name">Frederik Kottler</h5>
-    <p class="designation">Software Engineer</p>
+      <h5 class="name">Frederik Kottler</h5>
+      <p class="designation">Software Engineer</p>
 
-    <mat-divider></mat-divider>
-    
-    <button mat-button class="menu-button" routerLink="{{ item.route }}" *ngFor="let item of menuNav">
-      <mat-icon>{{ item.icon }}</mat-icon>
-      <span>{{ item.name }}</span>
-    </button>
+      <mat-divider></mat-divider>
+      
+      <button mat-button class="menu-button" routerLink="{{ item.route }}" *ngFor="let item of menuNav">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.name }}</span>
+      </button>      
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content>

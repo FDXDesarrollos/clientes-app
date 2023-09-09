@@ -1,6 +1,6 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,8 +26,11 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { FormComponent } from './clientes/form.component';
 import { PaginadorComponent } from './clientes/paginador/paginador.component';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
+import { LoginComponent } from './usuarios/login.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
+import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
+import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
 
 /***  Configuración global para la internacionalización de LocaleData   ***/
 /***  para formato de fechas, monedas, currency   ***/
@@ -46,7 +49,8 @@ registerLocaleData(localeES, 'es-MX');
     PagenotfoundComponent,
     FormComponent,
     PaginadorComponent,
-    DetalleComponent
+    DetalleComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +68,12 @@ registerLocaleData(localeES, 'es-MX');
     MatDatepickerModule, MatMomentDateModule,
     FormsModule
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'es-MX'}],   //  Se agrega esta linea entre {...} para poder usar el formato en las vistas
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es-MX' },  //  Se agrega esta linea entre {...} para poder usar el formato en las vistas
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+  ],   
+  
   bootstrap: [AppComponent]
 })
 export class AppModule { }

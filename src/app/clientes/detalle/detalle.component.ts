@@ -1,3 +1,4 @@
+import { AuthService } from './../../usuarios/auth.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpEventType } from '@angular/common/http';
 //import { ActivatedRoute } from '@angular/router';
@@ -26,6 +27,7 @@ export class DetalleComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
               public modalService: ModalService,
+              public authService: AuthService,
               //private activatedRoute: ActivatedRoute
               ) {  }
 

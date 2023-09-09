@@ -4,7 +4,7 @@
     </div>
     <div class="card-body text-primary">
 
-        <button class="btn btn-success my-2 text-right" type="button" [routerLink]="['/clientes/form']" title="NUEVO">
+        <button *ngIf="authService.tienePermiso('ROLE_ADMIN')" class="btn btn-success my-2 text-right" type="button" [routerLink]="['/clientes/form']" title="NUEVO">
             <mat-icon>add</mat-icon>
         </button>
     
@@ -15,27 +15,24 @@
         <table class="table table-bordered table-striped" *ngIf="clientes.length > 0">
             <thead>
                 <tr class="text-center">
-                    <th>PERFIL</th>
+                    <th *ngIf="authService.tienePermiso('ROLE_USER')">PERFIL</th>
                     <th>NOMBRE</th>
                     <th>APELLIDO</th>
                     <th>CORREO</th>
                     <th>FECHA</th>
-                    <th>ACCIONES</th>
+                    <th *ngIf="authService.tienePermiso('ROLE_ADMIN')">ACCIONES</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let cliente of clientes">
-                    <td style="text-align: center;">
-                        <!-- <button type="button" [routerLink]="['/clientes/detalle/', cliente.id]" name="detalle" class="btn btn-secondary" style="margin-right: 10px;" title="DETALLE">
-                        {{ cliente.id }}
-                        </button> -->
-                        <img [src]="cliente.imagen" (click)="verDetalle(cliente)" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;" />
+                    <td *ngIf="authService.tienePermiso('ROLE_USER')" style="text-align: center;">
+                        <img [src]="cliente.imagen" (click)="verDetalle(cliente)" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;" title="DETALLE"/>
                     </td>
                     <td>{{ cliente.nombre }}</td>
                     <td>{{ cliente.apellido }}</td>
                     <td>{{ cliente.correo }}</td>
                     <td style="text-align: center;">{{ cliente.fecha | date:"fullDate" }}</td>
-                    <td style="text-align: center;">
+                    <td *ngIf="authService.tienePermiso('ROLE_ADMIN')" style="text-align: center;">
                         <button type="button" name="editar" class="btn btn-warning" [routerLink]="['/clientes/form/', cliente.id]" style="margin-right: 10px;" title="EDITAR">
                             <mat-icon>edit</mat-icon>
                         </button>
